@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Formato Protección Civil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            vertical-align: top;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            border: none;
+            font-size: 14px;
+            background: transparent;
+        }
+
+        h2,
+        h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .signature-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .signature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 250px;
+        }
+
+        canvas {
+            border: 1px solid #000;
+            width: 250px;
+            height: 100px;
+        }
+
+        .signature p {
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .linea-firma {
+            margin-top: 5px;
+            border-top: 1px solid #000;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .no-print {
+            text-align: center;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                margin: 10mm;
+                zoom: 85%;
+            }
+
+            canvas {
+                width: 200px !important;
+                height: 80px !important;
+            }
+
+            .signature-container {
+                justify-content: space-around;
+                margin-top: 30px;
+            }
+
+            .signature p {
+                text-align: center;
+                font-size: 12px;
+                margin-bottom: 5px;
+            }
+
+            .linea-firma {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <img src="tolzu.png" alt="Logo Centro Tolzú" class="logo" style="width:150px; margin-bottom: 20px;" />
+
+    <h2>Formato Protección Civil - Centro Tolzú</h2>
+
+    <table>
+        <tr>
+            <td colspan="2"><strong>CTO DE REFERENCIA No.</strong><br><input type="text" placeholder="R-XXXX"></td>
+            <td>
+                <strong>Fechas</strong><br>
+                <input type="date"><br>
+                <input type="date">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><strong>Razón social persona física o moral:</strong><br><input type="text"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><strong>Representante legal:</strong><br><input type="text"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><strong>Nombre comercial:</strong><br><input type="text"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><strong>Giro:</strong><br><input type="text"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><strong>Horario:</strong><br><input type="text"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><strong>Superficie a utilizar:</strong><br><input type="text"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><strong>Afluencia de visitantes estimada:</strong><br><input type="text"></td>
+        </tr>
+    </table>
+
+    <h3>Reglamento</h3>
+    <p>
+        Con base en el REGLAMENTO DE LA LEY DE PROTECCION CIVIL DEL ESTADO DE MEXICO Artículo 44.- Los administradores,
+        gerentes, poseedores, arrendatarios o propietarios de inmuebles que por su propia naturaleza o por el uso al que
+        sean destinados reciban una afluencia masiva y permanente de personas, están obligados a preparar un programa
+        específico de protección civil, conforme a los lineamientos establecidos por la Dirección General. Con
+        fundamento en los artículos 64, Fracc. XXV, 81, 82, 84, 85 Y 98 del Bando Municipal de Toluca, artículos 8.8,
+        8.11, 8.14, 8.15, 8.23, 8.28, 8.32, 8.33, 8.36, 8.67 y 8.80 del código reglamentario municipal de Toluca con
+        relación a la obtención de autorizaciones y vistos buenos para giros económicos de bajo riesgo, eventos
+        públicos. Deberán cumplir con:
+    </p>
+    <p>
+        Requisitos generales para la obtención de autorizaciones y vistos buenos en coordinación municipal de Protección
+        Civil y Bomberos (CMPCyB) inciso C. Para la Obtención de Visto bueno para eventos en municipio de Toluca
+        (Auditorios, Centro de espectáculos, teatros etc. tendrán que presentar la siguiente documentación en original
+        (para cotejo) y copia. https://www2.toluca.gob.mx/wp-content/uploads/2020/01/TRAM-2020_VoBo.pdf
+        A continuación se indica listado de puntos a cumplir para trámite en Protección Civil y responsable de
+        cumplimiento.
+    </p>
+
+    <h3>Documentación y requisitos a cumplir</h3>
+    <table>
+        <tr>
+            <td class="checkbox"><input type="checkbox"> Oficio de entrega de plan de emergencia</td>
+            <td>Centro Tolzú</td>
+        </tr>
+        <tr>
+            <td class="checkbox"><input type="checkbox"> Carta poder firmada por el representante legal y el apoderado
+            </td>
+            <td>Centro Tolzú</td>
+        </tr>
+        <tr>
+            <td class="checkbox"><input type="checkbox"> Copia de identificación oficial vigente del representante legal
+            </td>
+            <td>Centro Tolzú</td>
+        </tr>
+        <tr>
+            <td class="checkbox"><input type="checkbox"> Constancia de capacitación</td>
+            <td>Centro Tolzú</td>
+        </tr>
+        <tr>
+            <td class="checkbox"><input type="checkbox"> Croquis de ubicación del evento</td>
+            <td>Centro Tolzú</td>
+        </tr>
+        <tr>
+            <td class="checkbox"><input type="checkbox"> Póliza de seguro de daños a terceros y responsabilidad civil
+            </td>
+            <td>Centro Tolzú</td>
+        </tr>
+        <tr>
+            <td class="checkbox"><input type="checkbox"> Contrato entre el titular del evento y el titular del inmueble
+            </td>
+            <td>Centro Tolzú</td>
+        </tr>
+        <tr>
+            <td class="checkbox"><input type="checkbox"> Layout del evento con áreas libres, extintores, hidrantes y
+                salidas de emergencia</td>
+            <td>Cliente</td>
+        </tr>
+        <tr>
+            <td class="checkbox"><input type="checkbox"> Atención prehospitalaria y equipamiento (Contrato paramédico y
+                ambulancia)</td>
+            <td>Cliente</td>
+        </tr>
+        <tr>
+            <td class="checkbox"><input type="checkbox"> Servicio de seguridad (contrato o carta de servicio contratado)
+            </td>
+            <td>Cliente</td>
+        </tr>
+    </table>
+
+    <!-- Firmas -->
+    <div class="signature-container">
+        <div class="signature">
+            <p>Responsable del Evento</p>
+            <canvas id="firma1"></canvas>
+            <div class="linea-firma">Firma Responsable</div>
+            <div class="no-print">
+                <button class="clear-button" onclick="limpiarFirma('firma1')">Limpiar Firma</button>
+            </div>
+        </div>
+        <div class="signature">
+            <p>Protección Civil Tolzú</p>
+            <canvas id="firma2"></canvas>
+            <div class="linea-firma">Firma Protección Civil</div>
+            <div class="no-print">
+                <button class="clear-button" onclick="limpiarFirma('firma2')">Limpiar Firma</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón de imprimir -->
+    <div class="no-print">
+        <button onclick="window.print()">Imprimir</button>
+    </div>
+
+    <p style="margin-top: 40px; font-size: 12px;">
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp;
+        PROMOCION CULTURAL MEXIQUENSE
+        S.A. DE C.V. / CONSORCIO EMPRESARIAL DIMOVA S.A. DE C.V.<br>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp;
+        Avenida Miguel Hidalgo y
+        Costilla Oriente, 201, Col. Santa Clara, Toluca de Lerdo, México, CP 50090
+    </p>
+
+    <!-- Script para capturar firma -->
+    <script>
+        function configurarCanvas(id) {
+            const canvas = document.getElementById(id);
+            const ctx = canvas.getContext("2d");
+            let dibujando = false;
+
+            function obtenerPosicion(e) {
+                const rect = canvas.getBoundingClientRect();
+                const x = (e.clientX || e.touches[0].clientX) - rect.left;
+                const y = (e.clientY || e.touches[0].clientY) - rect.top;
+                return { x, y };
+            }
+
+            function comenzarDibujo(e) {
+                e.preventDefault();
+                dibujando = true;
+                const { x, y } = obtenerPosicion(e);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            }
+
+            function dibujar(e) {
+                if (!dibujando) return;
+                const { x, y } = obtenerPosicion(e);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            }
+
+            function detenerDibujo() {
+                dibujando = false;
+            }
+
+            canvas.addEventListener("mousedown", comenzarDibujo);
+            canvas.addEventListener("mousemove", dibujar);
+            canvas.addEventListener("mouseup", detenerDibujo);
+            canvas.addEventListener("mouseout", detenerDibujo);
+
+            canvas.addEventListener("touchstart", comenzarDibujo);
+            canvas.addEventListener("touchmove", function (e) {
+                dibujar(e);
+                e.preventDefault();
+            });
+            canvas.addEventListener("touchend", detenerDibujo);
+        }
+
+        function limpiarFirma(id) {
+            const canvas = document.getElementById(id);
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        configurarCanvas("firma1");
+        configurarCanvas("firma2");
+    </script>
+
+</body>
+
+</html>
