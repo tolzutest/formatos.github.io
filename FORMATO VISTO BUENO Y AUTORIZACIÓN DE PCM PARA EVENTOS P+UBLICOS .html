@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visto Bueno PCM Eventos Públicos</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f8f8f8;
+        }
+        .documento {
+            width: 8.5in;
+            height: 11in;
+            padding: 2cm;
+            margin: auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+            position: relative;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        header img {
+            max-width: 200px;
+            height: auto;
+        }
+        .contenido {
+            text-align: justify;
+            font-size: 11px;
+        }
+        .firma {
+            margin-top: 50px;
+            text-align: center;
+        }
+        #canvasFirma {
+            border: 1px solid #ccc;
+            width: 300px;
+            height: 100px;
+            display: block;
+            margin: 0 auto 10px auto;
+        }
+        .btn-imprimir,
+        .btn-limpiar,
+        .btn-pdf,
+        .btn-inicio {
+            position: fixed;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+            border-radius: 5px;
+        }
+        .btn-imprimir {
+            top: 20px;
+            right: 20px;
+        }
+        .btn-pdf {
+            top: 60px;
+            right: 20px;
+            background-color: #28a745;
+        }
+        .btn-inicio {
+            top: 100px;
+            right: 20px;
+            background-color: #ffc107;
+            color: black;
+        }
+        .btn-limpiar {
+            bottom: 20px;
+            right: 20px;
+            background-color: #dc3545;
+        }
+        @media print {
+            @page {
+                size: letter portrait;
+                margin: 0;
+            }
+            body {
+                margin: 0;
+                background: none;
+            }
+            .btn-imprimir,
+            .btn-limpiar,
+            .btn-pdf,
+            .btn-inicio {
+                display: none;
+            }
+            .documento {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                padding: 2cm;
+                page-break-after: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="btn-imprimir" onclick="window.print()">Imprimir</button>
+    <button class="btn-pdf" onclick="exportarPDF()">Exportar PDF</button>
+    <button class="btn-inicio" onclick="window.location.href='index.html'">Inicio</button>
+    <button class="btn-limpiar" onclick="limpiarFirma()">Limpiar Firma</button>
+
+    <div id="documento" class="documento">
+        <header>
+            <img src="tolzu.png" alt="Logo (reemplazar logo.png)">
+        </header>
+
+        <div class="contenido" contenteditable="true">
+            <p>Toluca, Estado de México a 07 de mayo 2025</p><br><br>
+
+            <p>M. en D. Juan Carlos Yáñez Rodríguez<br>
+            Coordinador de Protección Civil y Bomberos</p>
+
+            <p>PRESENTE</p><br><br>
+
+            <p>Por medio de la presente solicito amablemente nos otorguen el visto bueno y autorización para realizar el siguiente evento público en municipio de Toluca.</p><br><br>
+
+            <p><strong>Nombre del evento:</strong></p>
+            <p><strong>Lugar y domicilio:</strong></p>
+            <p><strong>Día:</strong></p>
+            <p><strong>Horario:</strong></p>
+            <p><strong>Funciones:</strong></p>
+            <p><strong>Número de asistentes:</strong></p>
+            <p><strong>Tipo de evento:</strong></p><br><br>
+
+            <p>Agradezco de antemano la atención.</p><br><br>
+
+            <p>CORDIALMENTE</p>
+        </div>
+
+        <div class="firma">
+            <canvas id="canvasFirma"></canvas>
+            <p contenteditable="true">Nombre completo y firma</p>
+            <p><strong>Teléfono:</strong> <span contenteditable="true">Escribe aquí el teléfono</span></p>
+            <p><strong>Correo:</strong> <span contenteditable="true">Escribe aquí el correo</span></p>
+        </div>
+    </div>
+
+    <!-- Librerías -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        let canvas = document.getElementById('canvasFirma');
+        let ctx = canvas.getContext('2d');
+        let dibujando = false;
+
+        canvas.addEventListener('mousedown', iniciarFirma);
+        canvas.addEventListener('mousemove', dibujarFirma);
+        canvas.addEventListener('mouseup', detenerFirma);
+        canvas.addEventListener('mouseleave', detenerFirma);
+
+        function iniciarFirma(e) {
+            dibujando = true;
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+        }
+
+        function dibujarFirma(e) {
+            if (!dibujando) return;
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+        }
+
+        function detenerFirma() {
+            dibujando = false;
+        }
+
+        function limpiarFirma() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        async function exportarPDF() {
+            let dataURL = canvas.toDataURL();
+            let imgFirma = document.createElement('img');
+            imgFirma.src = dataURL;
+            imgFirma.style.maxWidth = '300px';
+            imgFirma.style.display = 'block';
+            imgFirma.style.margin = '0 auto';
+
+            let firmaContainer = document.querySelector('.firma');
+            firmaContainer.insertBefore(imgFirma, canvas);
+            canvas.style.display = 'none';
+
+            const element = document.getElementById('documento');
+
+            const canvasCaptura = await html2canvas(element, {
+                scale: 3,
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                logging: false,
+                scrollY: -window.scrollY
+            });
+
+            const imgData = canvasCaptura.toDataURL('image/jpeg', 1.0);
+
+            const pdf = new jspdf.jsPDF('p', 'pt', 'letter');
+
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+
+            const imgWidth = canvasCaptura.width;
+            const imgHeight = canvasCaptura.height;
+
+            const ratio = Math.min(pageWidth / imgWidth, pageHeight / imgHeight);
+
+            const imgX = 0;
+            const imgY = 0;
+            const imgW = imgWidth * ratio;
+            const imgH = imgHeight * ratio;
+
+            pdf.addImage(imgData, 'JPEG', imgX, imgY, imgW, imgH);
+
+            pdf.save('formato-visto-bueno.pdf');
+
+            canvas.style.display = 'block';
+            firmaContainer.removeChild(imgFirma);
+        }
+    </script>
+
+</body>
+</html>
