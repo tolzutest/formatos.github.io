@@ -12,32 +12,38 @@
             font-family: Arial, sans-serif;
             background: #f8f8f8;
         }
+
         .documento {
             width: 8.5in;
             height: 11in;
             padding: 2cm;
             margin: auto;
             background: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             box-sizing: border-box;
             position: relative;
         }
+
         header {
             text-align: center;
             margin-bottom: 20px;
         }
+
         header img {
             max-width: 200px;
             height: auto;
         }
+
         .contenido {
             text-align: justify;
             font-size: 11px;
         }
+
         .firma {
             margin-top: 50px;
             text-align: center;
         }
+
         #canvasFirma {
             border: 1px solid #ccc;
             width: 300px;
@@ -45,10 +51,12 @@
             display: block;
             margin: 0 auto 10px auto;
         }
+
         .btn-imprimir,
         .btn-limpiar,
         .btn-pdf,
-        .btn-inicio {
+        .btn-inicio,
+        .btn-borrar-datos {
             position: fixed;
             padding: 10px 20px;
             background-color: #007bff;
@@ -58,41 +66,56 @@
             z-index: 1000;
             border-radius: 5px;
         }
+
         .btn-imprimir {
             top: 20px;
             right: 20px;
         }
+
         .btn-pdf {
             top: 60px;
             right: 20px;
             background-color: #28a745;
         }
+
         .btn-inicio {
             top: 100px;
             right: 20px;
             background-color: #ffc107;
             color: black;
         }
+
         .btn-limpiar {
             bottom: 20px;
             right: 20px;
             background-color: #dc3545;
         }
+
+        .btn-borrar-datos {
+            bottom: 20px;
+            left: 20px;
+            background-color: #6c757d;
+        }
+
         @media print {
             @page {
                 size: letter portrait;
                 margin: 0;
             }
+
             body {
                 margin: 0;
                 background: none;
             }
+
             .btn-imprimir,
             .btn-limpiar,
             .btn-pdf,
-            .btn-inicio {
+            .btn-inicio,
+            .btn-borrar-datos {
                 display: none;
             }
+
             .documento {
                 box-shadow: none;
                 margin: 0;
@@ -111,6 +134,7 @@
     <button class="btn-pdf" onclick="exportarPDF()">Exportar PDF</button>
     <button class="btn-inicio" onclick="window.location.href='index.html'">Inicio</button>
     <button class="btn-limpiar" onclick="limpiarFirma()">Limpiar Firma</button>
+    <button class="btn-borrar-datos" onclick="limpiarDatos()">Borrar Datos</button>
 
     <div id="documento" class="documento">
         <header>
@@ -139,7 +163,6 @@
 
             <center>
                 <p>Agradezco de antemano la atención.</p><br>
-
                 <p>CORDIALMENTE</p>
             </center>
         </div>
@@ -149,7 +172,6 @@
             <p contenteditable="true">Nombre completo y firma</p>
             <p><strong>Teléfono:</strong> <span contenteditable="true">Escribe aquí el teléfono</span></p>
             <p><strong>Correo:</strong> <span contenteditable="true">Escribe aquí el correo</span></p>
-
         </div>
     </div>
 
@@ -158,7 +180,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
-        // Configuración canvas firma
+        // Guardado automático con localStorage
+        const camposEditables = document.querySelectorAll('[contenteditable="true"]');
+
+        window.onload = () => {
+            camposEditables.forEach((campo, i) => {
+                const contenidoGuardado = localStorage.getItem(`campoEditable_${i}`);
+                if (contenidoGuardado) {
+                    campo.innerHTML = contenidoGuardado;
+                }
+            });
+        };
+
+        camposEditables.forEach((campo, i) => {
+            campo.addEventListener('input', () => {
+                localStorage.setItem(`campoEditable_${i}`, campo.innerHTML);
+            });
+        });
+
+        function limpiarDatos() {
+            if (confirm("¿Estás seguro de que quieres borrar todos los datos guardados?")) {
+                camposEditables.forEach((_, i) => {
+                    localStorage.removeItem(`campoEditable_${i}`);
+                });
+                location.reload();
+            }
+        }
+
+        // Firma canvas
         let canvas = document.getElementById('canvasFirma');
         let ctx = canvas.getContext('2d');
         let dibujando = false;
@@ -201,7 +250,6 @@
             canvas.style.display = 'none';
 
             const element = document.getElementById('documento');
-
             const canvasCaptura = await html2canvas(element, {
                 scale: 3,
                 useCORS: true,
@@ -211,31 +259,22 @@
             });
 
             const imgData = canvasCaptura.toDataURL('image/jpeg', 1.0);
-
             const pdf = new jspdf.jsPDF('p', 'pt', 'letter');
 
             const pageWidth = pdf.internal.pageSize.getWidth();
             const pageHeight = pdf.internal.pageSize.getHeight();
+            const ratio = Math.min(pageWidth / canvasCaptura.width, pageHeight / canvasCaptura.height);
 
-            const imgWidth = canvasCaptura.width;
-            const imgHeight = canvasCaptura.height;
+            const imgW = canvasCaptura.width * ratio;
+            const imgH = canvasCaptura.height * ratio;
 
-            const ratio = Math.min(pageWidth / imgWidth, pageHeight / imgHeight);
-
-            const imgX = 0;
-            const imgY = 0;
-            const imgW = imgWidth * ratio;
-            const imgH = imgHeight * ratio;
-
-            pdf.addImage(imgData, 'JPEG', imgX, imgY, imgW, imgH);
-
+            pdf.addImage(imgData, 'JPEG', 0, 0, imgW, imgH);
             pdf.save('formato-visto-bueno.pdf');
 
             canvas.style.display = 'block';
             firmaContainer.removeChild(imgFirma);
         }
     </script>
-
 </body>
 
 </html>
